@@ -118,8 +118,16 @@ public class GameController : MonoBehaviour
             //SI: es espacio, volver al centro
             //SI: es el mismo char que el anterior, volver al centro y volver a la letra
 
-            seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find(c.ToString()).position,
-                rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(ReachedLetter));
+            if (c == ' ')
+            {
+                seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find("START").position,
+                    rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(ReachedLetter));
+            }
+            else
+            {
+                seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find(c.ToString()).position,
+                    rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(ReachedLetter));
+            }
         }
     }
 
