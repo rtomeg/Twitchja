@@ -107,7 +107,7 @@ public class GameController : MonoBehaviour
                 //TODO: Check if starts with the command
 
                 int msgIndex = msg.IndexOf("PRIVMSG #");
-                string msgString = msg.Substring(msgIndex + Secrets.CHANNEL_NAME.Length + 11);
+                string msgString = msg.Substring(msgIndex + TwitchData.Instance.channelName.Length + 11);
 
                 if (msgString.StartsWith(command))
                 {

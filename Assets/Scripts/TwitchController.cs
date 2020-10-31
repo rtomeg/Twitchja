@@ -38,8 +38,8 @@ public class TwitchController : MonoBehaviour
         var output = new System.IO.StreamWriter(networkStream);
 
         //Send PASS & NICK.
-        output.WriteLine("PASS " + Secrets.PASSWORD);
-        output.WriteLine("NICK " + Secrets.USERNAME.ToLower());
+        output.WriteLine("PASS " + TwitchData.Instance.password);
+        output.WriteLine("NICK " + TwitchData.Instance.username.ToLower());
         output.Flush();
 
         //output proc
@@ -81,7 +81,7 @@ public class TwitchController : MonoBehaviour
             //After server sends 001 command, we can join a channel
             if (buffer.Split(' ')[1] == "001")
             {
-                SendCommand("JOIN #" + Secrets.CHANNEL_NAME.ToLower());
+                SendCommand("JOIN #" + TwitchData.Instance.channelName.ToLower());
             }
 
             Thread.Sleep(1);
@@ -129,7 +129,7 @@ public class TwitchController : MonoBehaviour
     {
         lock (commandQueue)
         {
-            commandQueue.Enqueue("PRIVMSG #" + Secrets.CHANNEL_NAME.ToLower() + " :" + msg+"\r\n");
+            commandQueue.Enqueue("PRIVMSG #" + TwitchData.Instance.channelName.ToLower() + " :" + msg+"\r\n");
         }
     }
 
