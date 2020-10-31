@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 677a7de84e5794747a3c34a1ae04c201
+guid: 34e027939d79f4b42bc6489d4e0eb5f5
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Malachai
+  fontName: Bridgnorth
   fontNames:
-  - Malachai
+  - Bridgnorth
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

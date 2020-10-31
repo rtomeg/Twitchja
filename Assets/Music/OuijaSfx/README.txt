@@ -1,0 +1,1 @@
+Puede que haya que ecualizarlos, probamos, y si hay que ecualizar te las vuelvo a pasar arregladas

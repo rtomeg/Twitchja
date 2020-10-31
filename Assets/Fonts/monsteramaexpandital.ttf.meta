@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 08b661c55f1bf554c90aa96bf3bad185
+guid: 9a35f8f70af075e49bfbe3fe32218a53
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,10 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Another America
+  fontName: Monsterama Expanded Italic
   fontNames:
-  - Another America
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: f46999b68e65ec641a13e19cbd814832, type: 3}
+  - Monsterama Expanded Italic
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

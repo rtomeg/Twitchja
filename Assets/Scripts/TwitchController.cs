@@ -129,7 +129,7 @@ public class TwitchController : MonoBehaviour
     {
         lock (commandQueue)
         {
-            commandQueue.Enqueue("PRIVMSG #" + Secrets.CHANNEL_NAME + " :" + msg);
+            commandQueue.Enqueue("PRIVMSG #" + Secrets.CHANNEL_NAME.ToLower() + " :" + msg+"\r\n");
         }
     }
 

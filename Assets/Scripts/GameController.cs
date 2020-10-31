@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.XR;
 using Random = System.Random;
 
 public class GameController : MonoBehaviour
@@ -17,47 +16,86 @@ public class GameController : MonoBehaviour
     private string[] yesWords = {"YES", "YEP", "YEAH", "YUP", "SI", "SIP", "SIS", "CHI"};
     private string[] noWords = {"NO", "NOPE", "NOS", "NAH"};
 
+    private string yesText = "YES";
+    private string noText = "NO";
+    private string startText = "START";
+
     [SerializeField] private GameObject planchette;
     [SerializeField] private GameObject ouijaBoard;
+    [SerializeField] private Texture2D skeletonHand;
 
-    private int currentResponseIndex;
+    private string startReadingMessageEsp = "/me ha abierto un portal entre vuestro mundo y el suyo. Podéis contestar a su llamada usando el comando !ouija";
+    private string startReadingMessageEng = "/me has opened a portal between their world and ours. You can answer their call using the command !ouija";
+
+    
+    private string stopReadingMessageEsp = "/me ha cortado la conexión entre los mundos. Vuestras plegarias han sido escuchadas.";
+    private string stopReadingMessageEng = "/me has cut off the link between both worlds. Your prayers have been heard.";
+
 
     private Random rnd = new Random();
+
+    [SerializeField] private TwitchController _twitchController;
 
     public static bool inRitual { get; private set; }
 
     private void Start()
     {
         TwitchController.messageRecievedEvent.AddListener(OnChatMsgReceived);
+
+        Cursor.SetCursor(skeletonHand, Vector2.zero, CursorMode.Auto);
+
+        EventsManager.onStartReadingTwitchResponses += StartReadingTwitchResponses;
+        EventsManager.onEndReadingTwitchResponses += EndReadingTwitchResponses;
     }
 
-    public void StartRitual()
+    private void OnDestroy()
     {
+        EventsManager.onStartReadingTwitchResponses -= StartReadingTwitchResponses;
+        EventsManager.onEndReadingTwitchResponses -= EndReadingTwitchResponses;
+    }
+
+    public void StartReadingTwitchResponses()
+    {
+        _twitchController.SendMsg(startReadingMessageEsp);
+        _twitchController.SendMsg(startReadingMessageEng);
+
         inRitual = true;
     }
 
-    public void EndRitual()
+    public void EndReadingTwitchResponses()
     {
+        _twitchController.SendMsg(stopReadingMessageEsp);
+        _twitchController.SendMsg(stopReadingMessageEng);
+
         inRitual = false;
 
-        whispers.OrderBy(x => rnd.Next()).ToDictionary(item => item.Key, item => item.Value);
-
-        string response = whispers.GroupBy(v => v.Value)
-            .OrderByDescending(g => g.Count())
-            .First().Key;
-
-
-        /*
-        foreach (KeyValuePair<string, string> val in whispers)
+        string response = "";
+        if (whispers.Count > 0)
         {
-            Debug.Log((string.Format("Submitted {0} by {1}", val.Value, val.Key)));
+            whispers = whispers.OrderBy(x => rnd.Next()).ToDictionary(item => item.Key, item => item.Value);
+
+            response = whispers.GroupBy(v => v.Value)
+                .OrderByDescending(g => g.Count())
+                .First().Key;
+
+            //Debug.Log("THE SPIRITS HAVE TALKED " + response + " is the answer.");
+
         }
-        */
-
-        Debug.Log("THE SPIRITS HAVE TALKED " + response + " is the answer.");
-        MovePlanchette(response);
-
+        
+        StartOuijaResponse(response);
+        
         whispers.Clear();
+    }
+
+    public void StartOuijaResponse(string response)
+    {
+        EventsManager.onOuijaResponseStarted();
+        MovePlanchette(response);
+    }
+
+    public void EndOuijaResponse(string response)
+    {
+        EventsManager.onOuijaResponseEnded(response);
     }
 
     void OnChatMsgReceived(string msg)
@@ -66,18 +104,36 @@ public class GameController : MonoBehaviour
         {
             if (inRitual)
             {
+                //TODO: Check if starts with the command
+
                 int msgIndex = msg.IndexOf("PRIVMSG #");
-                string msgString = msg.Substring(msgIndex + Secrets.CHANNEL_NAME.Length + 11 + command.Length);
+                string msgString = msg.Substring(msgIndex + Secrets.CHANNEL_NAME.Length + 11);
+
+                if (msgString.StartsWith(command))
+                {
+                    msgString = msgString.Substring(command.Length);
+                }
+                else
+                {
+                    return;
+                }
+                
                 string user = msg.Substring(1, msg.IndexOf('!') - 1);
+
                 msgString = RemoveDiacritics(msgString);
                 msgString = Regex.Replace(msgString, @"[^A-Za-z0-9 ]+", "");
                 msgString = msgString.ToUpper();
 
-                Debug.Log(String.Format("Received {0} from {1}", msgString, user));
 
+                msgString = yesWords.Contains(msgString) ? yesText : msgString;
+                msgString = noWords.Contains(msgString) ? noText : msgString;
 
-                msgString = yesWords.Contains(msgString) ? "SI" : msgString;
-                msgString = noWords.Contains(msgString) ? "NO" : msgString;
+                if (msgString.Length > 0)
+                {
+                    msgString = msgString.Substring(0, Mathf.Min(msgString.Length, 25));
+                }
+
+                if (string.IsNullOrEmpty(msgString) || string.IsNullOrWhiteSpace(msgString)) return;
 
                 if (!whispers.ContainsKey(user))
                 {
@@ -87,6 +143,10 @@ public class GameController : MonoBehaviour
                 {
                     whispers[user] = msgString;
                 }
+
+                EventsManager.onCommandReceived(msgString);
+
+                Debug.Log(String.Format("Received {0} from {1}", msgString, user));
             }
         }
         else
@@ -99,41 +159,58 @@ public class GameController : MonoBehaviour
     {
         Sequence seq = DOTween.Sequence();
 
-        if (word.Equals("SI"))
+        if (word.Equals(yesText))
         {
-            planchette.transform.DOMove(ouijaBoard.transform.Find("SI").position, rnd.Next(1, 2))
-                .OnComplete(ReachedLetter);
+            planchette.transform.DOMove(ouijaBoard.transform.Find(yesText).position, rnd.Next(1, 2))
+                .OnComplete(() =>
+                {
+                    
+                    planchette.transform.DOMove(ouijaBoard.transform.Find(startText).position,
+                        rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(() =>
+                    {
+                        EventsManager.onLetterReached(yesText);
+                        EndOuijaResponse(yesText);
+                    });
+                });
             return;
         }
 
-        if (word.Equals("NO"))
+        if (word.Equals(noText))
         {
-            planchette.transform.DOMove(ouijaBoard.transform.Find("NO").position, rnd.Next(1, 2))
-                .OnComplete(ReachedLetter);
+            planchette.transform.DOMove(ouijaBoard.transform.Find(noText).position, rnd.Next(1, 2))
+                .OnComplete(() =>
+                {
+                    planchette.transform.DOMove(ouijaBoard.transform.Find(startText).position,
+                        rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(() =>
+                    {
+                        EventsManager.onLetterReached(noText);
+                        EndOuijaResponse(noText);
+                    });
+                });
             return;
         }
 
         foreach (var c in word)
         {
-            //SI: es espacio, volver al centro
-            //SI: es el mismo char que el anterior, volver al centro y volver a la letra
-
             if (c == ' ')
             {
-                seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find("START").position,
-                    rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(ReachedLetter));
+                seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find(startText).position,
+                        rnd.Next(1, 2)).SetDelay(0.5f, false)
+                    .OnComplete(() => EventsManager.onLetterReached(c.ToString())));
             }
             else
             {
                 seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find(c.ToString()).position,
-                    rnd.Next(1, 2)).SetDelay(0.5f, false).OnComplete(ReachedLetter));
+                        rnd.Next(1, 2)).SetDelay(0.5f, false)
+                    .OnComplete(() => EventsManager.onLetterReached(c.ToString())));
             }
         }
-    }
-
-    private void ReachedLetter()
-    {
-        //DO SMTHNG
+        
+        seq.Append(planchette.transform.DOMove(ouijaBoard.transform.Find(startText).position,
+                rnd.Next(1, 2)).SetDelay(0.5f, false)
+            .OnComplete(() => EventsManager.onLetterReached(" ")));
+        
+        seq.OnComplete(() => EndOuijaResponse(word));
     }
 
     static string RemoveDiacritics(string text)

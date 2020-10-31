@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3e57dfdc2a47cb74b8b515c861251d38
+guid: 191ac1f1e213ae141b058508d772b2d9
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: DK Plague Master
+  fontName: Comeback Of The Damned
   fontNames:
-  - DK Plague Master
+  - Comeback Of The Damned
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
