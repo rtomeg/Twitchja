@@ -196,6 +196,8 @@ GameObject:
   - component: {fileID: 147972707}
   - component: {fileID: 147972706}
   - component: {fileID: 147972708}
+  - component: {fileID: 147972709}
+  - component: {fileID: 147972710}
   m_Layer: 5
   m_Name: Spanish
   m_TagString: Untagged
@@ -338,6 +340,64 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 468722236}
           m_MethodName: SpanishLanguage
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &147972709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147972704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69d5b0a553aa384f8fdcdfb37417cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightedColor:
+    serializedVersion: 2
+    rgba: 4278190165
+--- !u!114 &147972710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147972704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 147972709}
+          m_MethodName: OnMouseEnterTrigger
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 147972709}
+          m_MethodName: OnMouseExitTrigger
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -991,6 +1051,7 @@ MonoBehaviour:
     type: 3}
   spawnDuration: 2
   margin: 200
+  maxSpookyWords: 300
 --- !u!114 &468722236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2117,13 +2178,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "  \n Para invocar la sabidur\xEDa del M\xE1s All\xE1, es importante seguir
-    los pasos del ritual:\n\n   1. <b>Formula tu pregunta en voz alta</b>, de forma
-    clara y precisa mientras sujetas el planchette triangular con decisi\xF3n.\n\n  
-    2. No tengas miedo: <b>sigue sujetando el planchette</b> para que el portal con
-    el M\xE1s All\xE1 no se cierre antes de tiempo.\n\n   3. Cuando creas que los
-    esp\xEDritus han comunicado todo lo que quer\xEDan decir, <b>deja que sean sus
-    manos las que muevan el planchette.</b>"
+  m_text: "\\n Para invocar la sabidur\xEDa del M\xE1s All\xE1, es importante seguir
+    los pasos del ritual:\\n \\n     1. <b>Formula tu pregunta en voz alta</b>, de
+    forma clara y precisa.\\n \\n     2. No tengas miedo: <b>manten sujeto  con firmeza
+    el planchette triangular</b> para abrir el portal con el M\xE1s All\xE1 y que
+    no se cierre antes de tiempo.\\n \\n    3. Cuando creas que los esp\xEDritus
+    han comunicado todo lo que quer\xEDan decir, <b>deja que sean sus manos las que
+    muevan el planchette.</b>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dd8d1e890c526a842bdc95af79964dd4, type: 2}
   m_sharedMaterial: {fileID: 5390111146825243588, guid: dd8d1e890c526a842bdc95af79964dd4,
@@ -2491,7 +2552,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 147972705}
-  - {fileID: 2065962384}
+  - {fileID: 1985577739}
   m_Father: {fileID: 238682113}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2500,7 +2561,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &2065962383
+--- !u!1 &1985577738
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2508,10 +2569,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2065962384}
-  - component: {fileID: 2065962386}
-  - component: {fileID: 2065962385}
-  - component: {fileID: 2065962387}
+  - component: {fileID: 1985577739}
+  - component: {fileID: 1985577744}
+  - component: {fileID: 1985577743}
+  - component: {fileID: 1985577742}
+  - component: {fileID: 1985577741}
+  - component: {fileID: 1985577740}
   m_Layer: 5
   m_Name: English
   m_TagString: Untagged
@@ -2519,13 +2582,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2065962384
+--- !u!224 &1985577739
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065962383}
+  m_GameObject: {fileID: 1985577738}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -2538,13 +2601,99 @@ RectTransform:
   m_AnchoredPosition: {x: 200, y: -450}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2065962385
+--- !u!114 &1985577740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065962383}
+  m_GameObject: {fileID: 1985577738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1985577741}
+          m_MethodName: OnMouseEnterTrigger
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1985577741}
+          m_MethodName: OnMouseExitTrigger
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1985577741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985577738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a69d5b0a553aa384f8fdcdfb37417cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightedColor:
+    serializedVersion: 2
+    rgba: 4278190165
+--- !u!114 &1985577742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985577738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 468722236}
+          m_MethodName: EnglishLanguage
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1985577743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985577738}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -2627,42 +2776,14 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &2065962386
+--- !u!222 &1985577744
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065962383}
+  m_GameObject: {fileID: 1985577738}
   m_CullTransparentMesh: 0
---- !u!114 &2065962387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065962383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 468722236}
-          m_MethodName: EnglishLanguage
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &2130971807 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6405391674785928852, guid: b3d1a1ac80a794d4a9d1ea20e5705e51,
