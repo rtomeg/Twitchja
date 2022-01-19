@@ -15,9 +15,7 @@
     public delegate void OnLetterReached(string letter);
     public static OnLetterReached onLetterReached;
 
-    public delegate void OnCommandReceived(string message);
+    public delegate void OnCommandReceived(string user, string message);
     public static OnCommandReceived onCommandReceived;
-
-
 
 }

@@ -11,7 +11,7 @@ using Random = System.Random;
 public class GameController : MonoBehaviour
 {
     private Dictionary<string, string> whispers = new Dictionary<string, string>();
-    private static string command = "!ouija ";
+    public static string command = "!ouija ";
 
     private string[] yesWords = {"YES", "YEP", "YEAH", "YUP", "SI", "SIP", "SIS", "CHI"};
     private string[] noWords = {"NO", "NOPE", "NOS", "NAH"};
@@ -23,15 +23,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject planchette;
     [SerializeField] private GameObject ouijaBoard;
     [SerializeField] private Texture2D skeletonHand;
-
-    private string startReadingMessageEsp = "/me ha abierto un portal entre vuestro mundo y el suyo. Podéis contestar a su llamada usando el comando !ouija";
-    private string startReadingMessageEng = "/me has opened a portal between their world and ours. You can answer their call using the command !ouija";
-
-    
-    private string stopReadingMessageEsp = "/me ha cortado la conexión entre los mundos. Vuestras plegarias han sido escuchadas.";
-    private string stopReadingMessageEng = "/me has cut off the link between both worlds. Your prayers have been heard.";
-
-
     private Random rnd = new Random();
 
     [SerializeField] private TwitchController _twitchController;
@@ -40,10 +31,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        TwitchController.messageRecievedEvent.AddListener(OnChatMsgReceived);
-
-        Cursor.SetCursor(skeletonHand, Vector2.zero, CursorMode.Auto);
-
+        EventsManager.onCommandReceived += OnChatMsgReceived;
         EventsManager.onStartReadingTwitchResponses += StartReadingTwitchResponses;
         EventsManager.onEndReadingTwitchResponses += EndReadingTwitchResponses;
     }
@@ -56,16 +44,11 @@ public class GameController : MonoBehaviour
 
     public void StartReadingTwitchResponses()
     {
-        _twitchController.SendMsg(startReadingMessageEsp);
-        _twitchController.SendMsg(startReadingMessageEng);
-
         inRitual = true;
     }
 
     public void EndReadingTwitchResponses()
     {
-        _twitchController.SendMsg(stopReadingMessageEsp);
-        _twitchController.SendMsg(stopReadingMessageEng);
 
         inRitual = false;
 
@@ -77,9 +60,6 @@ public class GameController : MonoBehaviour
             response = whispers.GroupBy(v => v.Value)
                 .OrderByDescending(g => g.Count())
                 .First().Key;
-
-            //Debug.Log("THE SPIRITS HAVE TALKED " + response + " is the answer.");
-
         }
         
         StartOuijaResponse(response);
@@ -98,60 +78,31 @@ public class GameController : MonoBehaviour
         EventsManager.onOuijaResponseEnded(response);
     }
 
-    void OnChatMsgReceived(string msg)
+    void OnChatMsgReceived(string user, string message)
     {
-        if (msg.Contains(command))
+        if (inRitual)
         {
-            if (inRitual)
+            message = RemoveDiacritics(message);
+            message = Regex.Replace(message, @"[^A-Za-z0-9 ]+", "");
+            message = message.ToUpper();
+
+
+            message = yesWords.Contains(message) ? yesText : message;
+            message = noWords.Contains(message) ? noText : message;
+
+            if (message.Length > 0)
             {
-                //TODO: Check if starts with the command
-
-                int msgIndex = msg.IndexOf("PRIVMSG #");
-                string msgString = msg.Substring(msgIndex + TwitchData.Instance.channelName.Length + 11);
-
-                if (msgString.StartsWith(command))
-                {
-                    msgString = msgString.Substring(command.Length);
-                }
-                else
-                {
-                    return;
-                }
-                
-                string user = msg.Substring(1, msg.IndexOf('!') - 1);
-
-                msgString = RemoveDiacritics(msgString);
-                msgString = Regex.Replace(msgString, @"[^A-Za-z0-9 ]+", "");
-                msgString = msgString.ToUpper();
-
-
-                msgString = yesWords.Contains(msgString) ? yesText : msgString;
-                msgString = noWords.Contains(msgString) ? noText : msgString;
-
-                if (msgString.Length > 0)
-                {
-                    msgString = msgString.Substring(0, Mathf.Min(msgString.Length, 25));
-                }
-
-                if (string.IsNullOrEmpty(msgString) || string.IsNullOrWhiteSpace(msgString)) return;
-
-                if (!whispers.ContainsKey(user))
-                {
-                    whispers.Add(user, msgString);
-                }
-                else
-                {
-                    whispers[user] = msgString;
-                }
-
-                EventsManager.onCommandReceived(msgString);
-
-                Debug.Log(String.Format("Received {0} from {1}", msgString, user));
+                message = message.Substring(0, Mathf.Min(message.Length, 25));
             }
-        }
-        else
-        {
-            //Es un mensaje de texto normal (o un comando) 
+            if (!whispers.ContainsKey(user))
+            {
+                whispers.Add(user, message);
+            }
+            else
+            {
+                whispers[user] = message;
+            }
+                
         }
     }
 

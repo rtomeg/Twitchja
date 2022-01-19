@@ -23,12 +23,9 @@ public class SpookyWords : MonoBehaviour
         EventsManager.onCommandReceived -= ShowSpookyWord;
     }
 
-    private void ShowSpookyWord(string word)
+    private void ShowSpookyWord(string user,string word)
     {
-        if (activeSpookyWords.Count >= maxSpookyWords)
-        {
-            return;
-        }
+        if (activeSpookyWords.Count >= maxSpookyWords) return;
 
         GameObject wordSpawned = Instantiate(spookyWord,
             new Vector3(Random.Range(margin, Screen.width - margin), Random.Range(margin, Screen.height - margin)),
