@@ -34,6 +34,8 @@ public class GameController : MonoBehaviour
         EventsManager.onCommandReceived += OnChatMsgReceived;
         EventsManager.onStartReadingTwitchResponses += StartReadingTwitchResponses;
         EventsManager.onEndReadingTwitchResponses += EndReadingTwitchResponses;
+
+        Debug.Log(System.Environment.GetEnvironmentVariable("USERNAME"));
     }
 
     private void OnDestroy()
@@ -93,7 +95,11 @@ public class GameController : MonoBehaviour
             if (message.Length > 0)
             {
                 message = message.Substring(0, Mathf.Min(message.Length, 25));
+                Debug.Log(message);
             }
+
+
+            
             if (!whispers.ContainsKey(user))
             {
                 whispers.Add(user, message);
