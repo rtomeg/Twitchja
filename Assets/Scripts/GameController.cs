@@ -10,7 +10,7 @@ using Random = System.Random;
 
 public class GameController : MonoBehaviour
 {
-    private Dictionary<string, string> whispers = new Dictionary<string, string>();
+    private Dictionary<string, string> whispers = new ();
     public static string command = "!ouija ";
 
     private string[] yesWords = {"YES", "YEP", "YEAH", "YUP", "SI", "SIP", "SIS", "CHI"};
@@ -22,11 +22,8 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private GameObject planchette;
     [SerializeField] private GameObject ouijaBoard;
-    [SerializeField] private Texture2D skeletonHand;
     private Random rnd = new Random();
-
-    [SerializeField] private TwitchController _twitchController;
-
+    
     public static bool inRitual { get; private set; }
 
     private void Start()
@@ -35,7 +32,7 @@ public class GameController : MonoBehaviour
         EventsManager.onStartReadingTwitchResponses += StartReadingTwitchResponses;
         EventsManager.onEndReadingTwitchResponses += EndReadingTwitchResponses;
 
-        Debug.Log(System.Environment.GetEnvironmentVariable("USERNAME"));
+        Debug.Log(Environment.GetEnvironmentVariable("USERNAME"));
     }
 
     private void OnDestroy()

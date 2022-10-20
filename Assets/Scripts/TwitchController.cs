@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -100,6 +99,8 @@ public class TwitchController : MonoBehaviour
             return;
 
         string buffer = input.ReadLine();
+        
+        Debug.Log(buffer);
 
         //was message?
         if (buffer.Contains("PRIVMSG #"))
